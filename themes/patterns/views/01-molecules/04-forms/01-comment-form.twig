@@ -1,0 +1,28 @@
+{{ include("atoms/form-group", {
+	"name": "text",
+	"label": "Name",
+	"placeholder": "Enter your Name",
+	"required": true
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "email",
+	"name": "emailaddress",
+	"label": "Email",
+	"placeholder": "Your email address"
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "url",
+	"name": "webaddress",
+	"label": "URL",
+	"placeholder": "Website if you got one"
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "textarea",
+	"name": "comment",
+	"label": "Comment",
+	"placeholder": "Write your comment here",
+	"row": 5
+}) }}

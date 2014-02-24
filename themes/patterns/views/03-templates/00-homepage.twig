@@ -1,0 +1,35 @@
+{% extends "templates/default" %}
+
+{% block body %}
+<div class="page" id="page">
+	{{ include("organisms/header") }}
+	<div role="main">
+		{{ include("molecules/block-hero") }}
+		<div class="g g-3up">
+			<div class="gi">
+				{{ include("molecules/inset-block") }}
+			</div>
+			<div class="gi">
+				{{ include("molecules/inset-block") }}
+			</div>
+			<div class="gi">
+				{{ include("molecules/inset-block") }}
+			</div>
+		</div>
+
+		<hr />
+
+		<div class="l-two-col">
+			<div class="l-main">
+				{{ include("organisms/latest-posts") }}
+			</div>
+
+			<div class="l-sidebar">
+				{{ include("organisms/recent-tweets") }}
+			</div>
+		</div>
+		
+	</div>
+	{{ include("organisms/footer") }}
+</div>
+{% endblock %}

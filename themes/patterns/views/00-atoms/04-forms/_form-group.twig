@@ -1,0 +1,39 @@
+{% import "macros/form" as form %}
+
+{% if required %}
+	{% set group = group|default([])|merge(["is-required"]) %}
+{% endif %}
+
+<div class="{{ BEM("form", "group", group|default([])) }}">
+	{% if label %}
+
+	<label class="form_label" for="{{ form_id }}-{{ name }}">{% block label %}{{ label }}{% endblock %}{% if label_help is defined %} <span class="form_label_help">{{ label_help }}</span>{% endif %}
+	</label>
+	{% endif %}
+	<div class="{{ BEM("form", "controls", controls|default([])) }}">
+		{% block controls %}
+			{% if options is defined %}
+				{{ form.choices(_context) }}
+			{% else %}
+				{{ form.input(_context) }}
+			{% endif %}
+		{% endblock %}
+	</div>
+	{% if errors|length > 0 %}
+	<div class="form_errors">
+		{% for errorType, errorText in errors %}
+		<div class="{{ BEM("form", "error", errorType) }}">{{ errorText }}</div>
+		{% endfor %}
+	</div>
+	{% endif %}
+
+
+	{% if helps|length > 0 %}
+	<div class="form_helps">
+		{% for helpType, helpText in helps %}
+		<div class="{{ BEM("form", "help", helpType) }}">{{ helpText }}</div>
+		{% endfor %}
+	</div>
+
+	{% endif %}
+</div>

@@ -1,0 +1,17 @@
+{% set form_id = "search-form" %}
+
+<form action="#" method="post" class="inline-form search-form">
+
+	{{ include("atoms/form-group", {
+		"type": "search",
+		"name": "search",
+		"label": "Search",
+		"placeholder": "Enter Search Term"
+	}) }}
+
+	<button class="search-submit">
+		<span class="icon-search" aria-hidden="true"></span>
+		<span class="is-vishidden">Search</span>
+	</button>
+
+</form>

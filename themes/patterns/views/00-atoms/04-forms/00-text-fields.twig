@@ -1,0 +1,74 @@
+{% set form_id = "text-fields" %}
+
+{{ include("atoms/form-group", {
+	"name": "text",
+	"label": "Text Input",
+	"placeholder": "Text Input",
+	"required": true
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "password",
+	"name": "password",
+	"label": "Password",
+	"placeholder": "Type your Password"
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "url",
+	"name": "webaddress",
+	"label": "Web Address",
+	"placeholder": "http://yoursite.com"
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "email",
+	"name": "emailaddress",
+	"label": "Email Address",
+	"placeholder": "name@email.com"
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "search",
+	"name": "search",
+	"label": "Search",
+	"placeholder": "Enter Search Term"
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "number",
+	"name": "number",
+	"label": "Number Input",
+	"placeholder": "Enter a Number",
+	"attrs": {
+		"pattern": "[0-9]*"
+	}
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "textarea",
+	"name": "textarea",
+	"label": "Textarea",
+	"placeholder": "Enter your message here",
+	"row": 8,
+	"cols": 48
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "text",
+	"name": "is-error",
+	"label": "Error input",
+	"placeholder": "Text Input",
+	"errors": "This field is invalid",
+	"group": ["error"]
+}) }}
+
+{{ include("atoms/form-group", {
+	"type": "text",
+	"name": "is-valid",
+	"label": "Valid input",
+	"placeholder": "Text Input",
+	"group": ["success"]
+}) }}
+
+

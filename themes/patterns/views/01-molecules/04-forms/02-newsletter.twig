@@ -1,0 +1,17 @@
+{% set form_id = "newsletter-form" %}
+
+<form action="#" method="post" class="inline-form newsletter-form">
+
+	{{ include("atoms/form-group", {
+		"type": "email",
+		"name": "newsletter",
+		"label": "Sign up for our newsletter",
+		"placeholder": "Email address"
+	}) }}
+
+	<button class="newsletter-submit">
+		<span class="icon-newsletter" aria-hidden="true"></span>
+		<span class="is-vishidden">Sign Me Up</span>
+	</button>
+
+</form>

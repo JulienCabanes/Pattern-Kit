@@ -1,0 +1,29 @@
+{% extends "templates/default" %}
+
+{% block body %}
+<div class="page" id="page">
+	{{ include("organisms/header") }}
+	<div role="main">
+		<h1 class="section-title">Our Outdoor Blog</h1>
+		<div class="l-two-col">
+			<div class="l-main">
+				<section class="section latest-posts">
+					
+					<ul class="post-list">
+						{% for post in latest_posts %}
+							<li>{{ include("molecules/media-block", post) }}</li>
+						{% endfor %}
+					</ul>
+					<a href="#" class="text-btn">View more posts</a>
+				</section>
+				{{ include("molecules/pagination") }}
+			</div>
+
+			<div class="l-sidebar">
+				{{ include("organisms/recent-tweets") }}
+			</div>
+		</div>
+	</div>
+	{{ include("organisms/footer") }}
+</div>
+{% endblock %}

@@ -1,0 +1,77 @@
+# Composer
+composer.phar
+composer.lock
+vendor/
+tmp/
+cache/
+
+# Themes should have its own repo except base ones
+themes/*
+!themes/base
+!themes/patterns
+
+# Distribution should not be versioned
+public/dist/
+
+# Bower folders
+assets/components/
+
+# Security
+.ftppass
+
+
+# Next rules were created by http://gitignore.io
+
+### SASS ###
+### SASS Ignores - "Sassy CSS" http://sass-lang.com/
+*.sass-cache
+
+### Node ###
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+pids
+logs
+results
+
+npm-debug.log
+node_modules
+
+### Compass ###
+.sass-cache
+
+### Bower ###
+bower_components
+
+
+### OSX ###
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+### Windows ###
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+

@@ -1,0 +1,38 @@
+{% block document %}
+{% block html %}
+<!doctype html>
+<html class="no-js">
+{% endblock %}
+
+{% block head %}
+<head>
+{% block head_metadata %}
+	<meta charset="utf-8">
+	<title>{{ (meta.page.title ? meta.page.title ~ " | ") ~ meta.site.title }}</title>
+	<meta name="description" content="{{ meta.site.description }}">
+	<meta name="author" content="{{ meta.site.author }}">
+{% endblock %}
+
+{% block stylesheet %}
+	<link href="{{ assets_dir }}/css/screen.css" rel="stylesheet" type="text/css">
+{% endblock %}
+</head>
+{% endblock %}
+
+<body>
+{% block body %}
+	{{ body|default("<h1>Pattern Kit Base theme</h1>")|raw }}
+{% endblock %}
+
+{% block scripts %}
+{% if app.env == 'prod' %}
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="{{ assets_dir }}/components/jquery/jquery.min.js"><\/script>')</script>
+{% else %}
+	<script src="{{ assets_dir }}/components/jquery/jquery.min.js"></script>
+{% endif %}
+	<script src="{{ assets_dir }}/js/main.js"></script>
+{% endblock %}
+</body>
+</html>
+{% endblock %}

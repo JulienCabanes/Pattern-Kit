@@ -1,0 +1,44 @@
+{% set rows = rows|default(4) %}
+{% set columns = columns|default(4) %}
+
+<table class="{{ BEM("data-table", [], modifier|default([])) }} responsive">
+	{% block thead %}
+	<thead>
+		<tr>
+{% for i in 1..columns %}
+	{% block th %}
+			<th>Table Heading {{ i }}</th>
+	{% endblock %}
+{% endfor %}
+		</tr>
+	</thead>
+	{% endblock %}
+
+
+	{% block tfoot %}
+	<tfoot>
+		<tr>
+{% for i in 1..columns %}
+	{% block tf %}
+			<th>Table Footer {{ i }}</th>
+	{% endblock %}
+{% endfor %}
+		</tr>
+	</tfoot>
+	{% endblock %}
+
+
+	{% block tbody %}
+	<tbody>
+{% for j in 1..rows %}
+		<tr>
+{% for i in 1..columns %}
+	{% block td %}
+			<td>{{ random(60) + 30 }}%</td>
+	{% endblock td %}
+{% endfor %}
+		</tr>
+{% endfor %}
+	</tbody>
+	{% endblock %}
+</table>

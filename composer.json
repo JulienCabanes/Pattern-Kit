@@ -1,0 +1,19 @@
+{
+    "name": "Pattern Kit",
+    "version": "0.0.1",
+    "require": {
+    	"silex/silex": "1.0.*",
+    	"twig/twig": "dev-master",
+    	"twig/extensions": "dev-master",
+        "symfony/twig-bridge": "2.1.*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Pattern\\": "src/Pattern/"
+        },
+        "files": [
+
+        ]
+    }
+}

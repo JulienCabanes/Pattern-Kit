@@ -1,0 +1,41 @@
+{% extends "templates/default" %}
+
+{% block body %}
+<div class="page" id="page">
+	{{ include("organisms/header") }}
+	<div role="main">
+		
+		{% for h in hero %}
+			{{ include("molecules/block-hero", h) }}
+		{% endfor %}
+
+		<div class="g g-3up">
+			{% for t in touts %}
+				<div class="gi">
+					{{ include("molecules/inset-block", t) }}
+				</div>
+			{% endfor %}
+		</div>
+
+		<hr />
+
+		<div class="l-two-col">
+			<div class="l-main">
+				<section class="section latest-posts">
+					<h2 class="section-title">Latest Posts</h2>
+					<ul class="post-list">
+						{% for post in latest_posts %}
+							<li>{{ include("molecules/media-block", post) }}</li>
+						{% endfor %}
+					</ul>
+					<a href="#" class="text-btn">View more posts</a>
+				</section>
+			</div>
+
+			<div class="l-sidebar">
+				{{ include("organisms/recent-tweets") }}
+			</div>
+	</div>
+	{{ include("organisms/footer") }}
+</div>
+{% endblock %}

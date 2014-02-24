@@ -1,0 +1,14 @@
+{
+	"meta": {
+		"site": {
+			"title": "Pattern Kit",
+			"description": "",
+			"author": "Me"
+		},
+
+		"page": {
+			"title": "Default page",
+			"description": "This is default page description"
+		}
+	}
+}
