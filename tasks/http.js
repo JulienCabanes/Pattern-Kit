@@ -8,10 +8,12 @@ function getHttpPathsFromJSON(jsonPath) {
 
   grunt.util._.forEach(pages, function(page, page_name) {
     paths[page_name] = {
-      options: {url: '<%= pkg.http_path %>/pages/' + page_name + '.html?prod'},
+      options: {url: '<%= pkg.http_path %>/pages/' + page_name + '.html?env=prod'},
       dest: '<%= pkg.dist_dir %>/pages/' + page_name + '.html'
     }
   });
+
+  // console.log('PATHS > ' + JSON.stringify(paths));
 
   return paths;
 };

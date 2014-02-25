@@ -80,6 +80,9 @@ class Theme
             }, $config['base_theme']);
         }
         
+        // Last fallback is themes dir (to avoid self-include loops)
+        array_push($paths, realpath($themes_dir));
+
         $this->paths = $paths;
         return $this->paths;
     }
