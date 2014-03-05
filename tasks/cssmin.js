@@ -4,16 +4,9 @@ module.exports = {
     report: false
   },
   dist: {
-    files: {
-      '<%= pkg.public_dir %>/dist/assets/css/screen.css': [
-        '<%= pkg.public_dir %>/dist/assets/css/screen.css'
-      ]
-      /** /
-      ,
-      '<%= pkg.public_dir %>/dist/assets/css/screen-ie.css': [
-        '<%= pkg.public_dir %>/dist/assets/css/screen-ie.css'
-      ]
-      /**/
-    }
+    expand: true,
+    cwd: '<%= pkg.dist_dir %>/<%= pkg.assets_dir %>/css/',
+    dest: '<%= pkg.dist_dir %>/<%= pkg.assets_dir %>/css/',
+    src: ['*.css']
   }
- }
+}

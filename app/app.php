@@ -22,7 +22,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 // Twig extension
 // TODO : better link function
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-    $twig->addGlobal('assets_dir', '../assets');
+    $twig->addGlobal('assets_dir', isset($_GET['assets_dir']) ? $_GET['assets_dir'] : '../assets');
     $twig->addGlobal('img_dir', '../assets/img');
     $twig->addExtension(new Pattern\Twig_Extension_Helper());
     $twig->addFunction(new Twig_SimpleFunction('link', function($path) use ($app) {

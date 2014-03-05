@@ -11,6 +11,13 @@ function getHttpPathsFromJSON(jsonPath) {
       options: {url: '<%= pkg.http_path %>/pages/' + page_name + '.html?env=prod'},
       dest: '<%= pkg.dist_dir %>/pages/' + page_name + '.html'
     }
+    // Index is a special page
+    if(page_name === 'index') {
+      paths[page_name] = {
+        options: {url: '<%= pkg.http_path %>/pages/' + page_name + '.html?assets_dir=assets'},
+        dest: '<%= pkg.dist_dir %>/' + page_name + '.html'
+      }
+    }
   });
 
   // console.log('PATHS > ' + JSON.stringify(paths));
