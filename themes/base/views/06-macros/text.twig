@@ -1,0 +1,11 @@
+{% macro heading(content, tag, class) %}
+{% set classes = {
+	h1: 'alpha',
+	h2: 'beta',
+	h3: 'gamma',
+	h4: 'delta'
+} %}
+<{{ tag|default("h1") }} class="{{ class|default(classes[tag|default("h1")]) }}">
+	{{ content|default("Titre lorem ipsum") }}
+</{{ tag|default("h1") }}>
+{% endmacro %}

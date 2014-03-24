@@ -21,7 +21,7 @@
 
 <body>
 {% block body %}
-	{{ body|default("<h1>Pattern Kit Base theme</h1>")|raw }}
+	{{ body|default("<h1>Pattern Kit</h1>")|raw }}
 {% endblock %}
 
 {% block scripts %}
@@ -32,6 +32,16 @@
 	<script src="{{ assets_dir }}/components/jquery/jquery.min.js"></script>
 {% endif %}
 	<script src="{{ assets_dir }}/js/main.js"></script>
+
+{# Uncomment the next line for browser-sync or livereload features #}
+{# # }
+{% if app.env != 'prod' %}
+	<script>document.write('<script src="//' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+	<script src="//localhost:3000/socket.io/socket.io.js"></script>
+	<script src="//localhost:3001/client/browser-sync-client.min.js"></script>
+{% endif %}
+{# #}
+
 {% endblock %}
 </body>
 </html>

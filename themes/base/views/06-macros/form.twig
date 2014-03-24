@@ -1,0 +1,67 @@
+{% macro _get_field_id(opts) %}
+{% spaceless %}
+{{ opts.id|default(opts.form_id ~ "-" ~ opts.name|default("field")) }}
+{% endspaceless %}
+{% endmacro %}
+
+{% macro input(opts) %}
+{% if opts.type == 'textarea' %}
+	{{ _self.textarea(opts) }}
+{% elseif opts.type == 'date' %}
+	{{ _self.date(opts) }}
+{% else %}
+	{% set field_id = _self._get_field_id(opts) %}
+	<input class="{{ BEM("form", "field", opts.field|default([])) }}" type="{{ opts.type|default("text") }}" id="{{ field_id }}" name="{{ opts.name|default("field") }}"{% if opts.title is defined %} title="{{ opts.title }}"{% endif %}{% if opts.placeholder is defined %} placeholder="{{ opts.placeholder }}" {% endif %}{% if opts.required %} required {% endif %}{% if opts.value %} value="{{ opts.value }}" {% endif %}{% for attribute, value in opts.attributes %} {{ attribute }}="{{ value }}"{% endfor %}
+	>
+{% endif %}
+{% endmacro %}
+
+
+{% macro textarea(opts) %}
+{% set field_id = _self._get_field_id(opts) %}
+<textarea class="{{ BEM("form", "field", opts.field|default([])) }}" id="{{ field_id }}" name="{{ opts.name|default("field") }}" rows="{{ opts.rows|default(3) }}" cols="{{ opts.cols|default(30) }}" {% if opts.placeholder is defined %} placeholder="{{ opts.placeholder }}" {% endif %}{% if opts.required %} required {% endif %}{% for attribute, value in opts.attributes %} {{ attribute }}="{{ value }}"{% endfor %}
+>{{ opts.value }}</textarea>
+{% endmacro %}
+
+{% macro date(opts) %}
+{% set field_id = _self._get_field_id(opts) %}
+{{ _self.input(opts|merge({"type": "text", "field": ["date"]})) }}
+<label for="{{ field_id }}" class="form_field_datepicker" title="Afficher le calendrier"><i class="icon-calendar"></i></label>
+{% endmacro %}
+
+{% macro choices(opts) %}
+{% set field_id = _self._get_field_id(opts) %}
+
+	{# Select #}
+	{% if opts.type == 'select' %}
+		{{ _self.select(opts) }}
+
+	{# Checkboxes & radios #}
+	{% else %}
+		{% for value, label in opts.options %}
+		{% set choice_id = field_id ~ "-" ~ value %}
+		{% set label = label.title is defined ? label.title : label %}
+		<p class="form_choice">
+			<input type="{{ opts.type|default('radio') }}" class="form_field" name="{{ opts.name }}" id="{{ choice_id }}" value="{{ value }}" {{ value == opts.value ? "checked" }} {{ opts.required ? "required" }}{% for attribute, value in opts.attributes %} {{ attribute }}="{{ value }}"{% endfor %}/>
+			<label for="{{ choice_id }}" class="form_choice_{{ opts.type|default('radio') }}"></label>
+			<label for="{{ choice_id }}" class="form_choice_label">{{ label|raw }}</label>
+		</p>
+		{% endfor %}
+	{% endif %}
+{% endmacro %}
+
+{% macro select(opts) %}
+{% set field_id = _self._get_field_id(opts) %}
+	<select class="{{ BEM("form", "field", opts.field|default([])) }}" id="{{ field_id }}" name="{{ opts.name }}" {{ opts.multiple ? "multiple" }} {{ opts.required ? "required" }}{% for attribute, value in opts.attributes %} {{ attribute }}="{{ value }}"{% endfor %}>
+		{% for value, label in opts.options %}
+		{% set label = label.title is defined ? label.title : label %}
+		<option value="{{ value }}" {{ value == opts.value ? "selected" }}>{{ label }}</option>
+		{% endfor %}
+	</select>
+{% endmacro %}
+
+{% macro actions(opts) %}
+<div class="form_actions">
+	<button type="submit" class="{{ BEM("btn", [], opts.btn) }}">{{ opts.submit }}</button>
+</div>
+{% endmacro %}

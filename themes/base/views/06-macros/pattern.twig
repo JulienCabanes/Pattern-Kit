@@ -1,0 +1,21 @@
+{% macro include(patternPath, vars) %}
+	{{ include(patternPath, vars|default({})) }}
+{% endmacro %}
+
+{% macro include_with_code(patternPath, vars) %}
+{% set pattern_id = uniqid() %}
+<div id="pattern-{{ pattern_id }}" class="pattern">
+	<a href="#pattern-code-{{ pattern_id }}" class="pattern_view-code">Code</a>
+	<div class="patter_view">{% include patternPath with vars|default({}) %}</div>
+
+	{% set pattern_code %}
+	<div id="pattern-code-{{ pattern_id }}" class="pattern_code">
+		<pre><code class="language-markup">{% filter escape %}{% include patternPath with vars|default({}) %}{% endfilter %}</code></pre>
+		<textarea class="pattern_code-text" cols="30" rows="3">{% filter escape %}{% include patternPath with vars|default({}) %}{% endfilter %}</textarea>
+	</div>
+	{% endset %}
+
+	{{ pattern_code }}
+	{# save_pattern_code(pattern_code) #}
+</div>
+{% endmacro %}

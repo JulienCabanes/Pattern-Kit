@@ -45,6 +45,52 @@ $app->match('/', function(Application $app) {
     return '<h1>Pattern Kit</h1>';
 });
 
+/**
+ * Assets proxy
+ * @todo Find a better way for doing this...
+ */
+$app->match('/{theme_name}/{asset_folder}/{asset_uri}', function($theme_name, $asset_folder, $asset_uri, Application $app) {
+    $basepath = realpath($app['themes_dir'].'/'.$theme_name.'/'.$asset_folder.'/');
+    $asset_path = realpath($basepath.'/'.$asset_uri);
+    
+    if(strpos($asset_path, $basepath) !== false && is_readable($asset_path)) {
+        $mime = '';
+        $exp = explode('.', $asset_path);
+        $ext = array_pop($exp);
+        // Light API
+        if($ext === 'php') {
+            // default http header
+            header('Content-type: application/json');
+            require($asset_path);
+            die();
+        }
+
+        $mimes = array(
+            'css' => 'text/css',
+            'js' => 'application/javascript',
+            'json' => 'application/json',
+            'jpg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/png',
+            'svg' => 'image/svg+xml'
+        );
+        if(isset($mimes[$ext])) {
+            $mime = $mimes[$ext];
+        } else {
+            $finfo = new finfo(FILEINFO_MIME);
+            $mime = $finfo->file($asset_path);
+        }
+        
+        return new Response(file_get_contents($asset_path), 200, array(
+            'Content-type' => $mime
+        ));
+    }
+   
+    return new Response('Assert 404', 404);
+})
+->assert('asset_folder', 'assets|data')
+->assert('asset_uri', '.*');
+
 
 /**
  * Pattern routing
@@ -72,43 +118,5 @@ $app->match('/{theme_name}/{pattern_type}/{pattern_name}.html', function($theme_
             'body' => $pattern_content
         ));
     }
-});
-
-
-/**
- * Assets proxy
- * @todo Find a better way for doing this...
- */
-$app->match('/{theme_name}/{asset_folder}/{asset_uri}', function($theme_name, $asset_folder, $asset_uri, Application $app) {
-    $basepath = realpath($app['themes_dir'].'/'.$theme_name.'/'.$asset_folder.'/');
-    $asset_path = realpath($basepath.'/'.$asset_uri);
-    
-    if(strpos($asset_path, $basepath) !== false && is_readable($asset_path)) {
-        $mime = '';
-        $exp = explode('.', $asset_path);
-        $ext = array_pop($exp);
-        $mimes = array(
-            'css' => 'text/css',
-            'js' => 'application/javascript',
-            'json' => 'application/json',
-            'jpg' => 'image/jpeg',
-            'png' => 'image/png',
-            'gif' => 'image/png',
-            'svg' => 'image/svg+xml'
-        );
-        if(isset($mimes[$ext])) {
-            $mime = $mimes[$ext];
-        } else {
-            $finfo = new finfo(FILEINFO_MIME);
-            $mime = $finfo->file($asset_path);
-        }
-        
-        return new Response(file_get_contents($asset_path), 200, array(
-            'Content-type' => $mime
-        ));
-    }
-   
-    return new Response('Assert 404', 404);
 })
-->assert('asset_folder', 'assets|data')
-->assert('asset_uri', '.*');
+->assert('pattern_name', '.*');

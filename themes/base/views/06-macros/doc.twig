@@ -1,0 +1,51 @@
+
+{% macro code(lang, code) %}
+<pre class="language-{{ lang }}"><code>{{- code -}}</code></pre>
+{% endmacro %}
+
+{% macro js(code) %}{{ _self.code('js', code) }}{% endmacro %}
+{% macro css(code) %}{{ _self.code('css', code) }}{% endmacro %}
+{% macro html(code, tidy=true) %}{{ _self.code('markup', tidy ? tidyHTML(code) : code) }}{% endmacro %}
+
+{% macro tag(tag) %}<code class="language-markup">{{ '<' ~ tag ~ '>' }}</code>{% endmacro %}
+
+{% macro code_tabs(lang, code) %}
+{{ _self.tabs({
+	"Source": _self.code(lang, code),
+	"Rendu": code
+}) }}
+{% endmacro %}
+
+{% macro js_tabs(code) %}{{ _self.code_tabs('js', code) }}{% endmacro %}
+{% macro css_tabs(code) %}{{ _self.code_tabs('css', code) }}{% endmacro %}
+{% macro html_tabs(code, tidy=true) %}{{ _self.code_tabs('markup', tidy ? tidyHTML(code) : code) }}{% endmacro %}
+
+{% macro tabs(tabs) %}
+{% set tabs_uniqid = uniqid() %}
+<div class="tabs">
+	<ul class="tabs-list">
+{% for tabTitle, tabContent in tabs %}
+		<li {{ loop.first ? 'class="active"' }}>
+			<a href="#tab-{{ tabs_uniqid ~ "-" ~ loop.index }}">{{ tabTitle|raw }}</a>
+		</li>
+{% endfor %}
+	</ul>
+	<div class="tabs-contents">
+{% for tabTitle, tabContent in tabs %}
+		<div id="tab-{{ tabs_uniqid ~ "-" ~ loop.index }}" class="tab {{ loop.first ? 'active' }}">
+			{{ tabContent|raw }}
+		</div>
+{% endfor %}
+	</div>
+</div>
+{% endmacro %}
+
+
+{% macro page_block(block, tidy=true, page) %}
+
+{% set code %}
+{% embed page|default(ups.templates.inner) %}{% block document %}{{ block(block) }}{% endblock %}{% endembed %}
+{% endset %}
+
+{{ _self.html('' ~ code, tidy)  }}
+{% endmacro %}

@@ -47,11 +47,13 @@ class Twig_Loader extends Twig_Loader_Filesystem implements Twig_LoaderInterface
             $data = json_decode(file_get_contents(realpath($data_path)), true);
             if(is_array($data)) {
                 foreach($data as $name => $value) {
-                    $value = json_encode($value);
+                    $encoded_value = json_encode($value);
                     if($default) {
-                        $value = $name.'|default('.$value.')';
+                        $encoded_value = $name.'|default('.$encoded_value.')';
+                    } elseif(!is_string($value)) {
+                        $encoded_value = $name.'|merge('.$encoded_value.')';
                     }
-                    $data_content .= '{% set '.$name.' = '.$value.' %}'."\n";
+                    $data_content .= '{% set '.$name.' = '.$encoded_value.' %}'."\n";
                 }
             }
         }

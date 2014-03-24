@@ -1,0 +1,19 @@
+{
+  "name": "Starter Theme",
+  "version": "0.0.1",
+  "dependencies": {
+    "jquery": "1.*",
+    "json2": "master",
+    "lodash": "~2.4.1",
+    "modernizr": "~2.7.1",
+    "requirejs": "2.*",
+    "almond": "~0.2.9",
+    "requirejs-plugins": "~1.0.2",
+    "requirejs-i18n": "~2.0.4",
+    "fastclick": "~0.6.11",
+    "Hide-Address-Bar": "git://github.com/scottjehl/Hide-Address-Bar.git",
+    "parsleyjs": "~1.2.3",
+    "bootstrap-sass": "git://github.com/twbs/bootstrap-sass.git#v3.0.3-0",
+    "typeahead.js": "~0.9.3"
+  }
+}
