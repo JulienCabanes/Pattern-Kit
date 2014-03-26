@@ -50,7 +50,7 @@ class Twig_Loader extends Twig_Loader_Filesystem implements Twig_LoaderInterface
                     $encoded_value = json_encode($value);
                     if($default) {
                         $encoded_value = $name.'|default('.$encoded_value.')';
-                    } elseif(!is_string($value)) {
+                    } elseif(!is_string($value) && substr($encoded_value, 0, 1) !== '[') {
                         $encoded_value = $name.'|merge('.$encoded_value.')';
                     }
                     $data_content .= '{% set '.$name.' = '.$encoded_value.' %}'."\n";

@@ -7,6 +7,7 @@ $app['root_dir'] = dirname(__DIR__);
 $app['tmp_dir'] = $app['root_dir'].'/tmp';
 $app['cache_dir'] = $app['tmp_dir'].'/cache';
 $app['themes_dir'] = $app['root_dir'].'/themes';
+$app['assets_dir'] = isset($_GET['assets_dir']) ? $_GET['assets_dir'] : '../assets';
 $app['env'] = isset($_GET['env']) ? $_GET['env'] : 'dev';
 $app['debug'] = $app['env'] === 'dev';
 
@@ -22,8 +23,8 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 // Twig extension
 // TODO : better link function
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-    $twig->addGlobal('assets_dir', isset($_GET['assets_dir']) ? $_GET['assets_dir'] : '../assets');
-    $twig->addGlobal('img_dir', '../assets/img');
+    $twig->addGlobal('assets_dir', $app['assets_dir']);
+    $twig->addGlobal('img_dir', $app['assets_dir'].'/img');
     $twig->addExtension(new Pattern\Twig_Extension_Helper());
     $twig->addFunction(new Twig_SimpleFunction('link', function($path) use ($app) {
         return '../../'.$app['theme']->getName().'/'.$path.'.html';
@@ -98,6 +99,10 @@ $app->match('/{theme_name}/{asset_folder}/{asset_uri}', function($theme_name, $a
 $app->match('/{theme_name}/{pattern_type}/{pattern_name}.html', function($theme_name, $pattern_type, $pattern_name, Application $app) {
     // Create the theme
     $app['theme'] = new Pattern\Theme($app['themes_dir'].'/'.$theme_name);
+
+    // Relative assets dir
+    $app['assets_dir'] = str_repeat('../', count(explode('/', $pattern_name)) - 1).$app['assets_dir'];
+
 
     // Fallback theme folders
     $app['twig.loader']->addLoader(new Pattern\Twig_Loader($app['theme']->getPaths()));
