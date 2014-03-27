@@ -53,7 +53,7 @@ $app->match('/', function(Application $app) {
 $app->match('/{theme_name}/{asset_folder}/{asset_uri}', function($theme_name, $asset_folder, $asset_uri, Application $app) {
     $basepath = realpath($app['themes_dir'].'/'.$theme_name.'/'.$asset_folder.'/');
     $asset_path = realpath($basepath.'/'.$asset_uri);
-    
+
     if(strpos($asset_path, $basepath) !== false && is_readable($asset_path)) {
         $mime = '';
         $exp = explode('.', $asset_path);
@@ -81,12 +81,12 @@ $app->match('/{theme_name}/{asset_folder}/{asset_uri}', function($theme_name, $a
             $finfo = new finfo(FILEINFO_MIME);
             $mime = $finfo->file($asset_path);
         }
-        
+
         return new Response(file_get_contents($asset_path), 200, array(
             'Content-type' => $mime
         ));
     }
-   
+
     return new Response('Assert 404', 404);
 })
 ->assert('asset_folder', 'assets|data')
@@ -100,6 +100,11 @@ $app->match('/{theme_name}/{pattern_type}/{pattern_name}.html', function($theme_
     // Create the theme
     $app['theme'] = new Pattern\Theme($app['themes_dir'].'/'.$theme_name);
 
+    $theme_plug_path = realpath($app['theme']->getDir().'/app.php');
+    if(is_readable($theme_plug_path)) {
+        require_once($theme_plug_path);
+    }
+
     // Relative assets dir
     $app['assets_dir'] = str_repeat('../', count(explode('/', $pattern_name)) - 1).$app['assets_dir'];
 
@@ -111,7 +116,7 @@ $app->match('/{theme_name}/{pattern_type}/{pattern_name}.html', function($theme_
     foreach($app['theme']->getData() as $name => $value) {
         $app['twig']->addGlobal($name, $value);
     }
-    
+
     // Template rendering
     $pattern_content = $app['twig']->render($pattern_type.'/'.$pattern_name);
 
