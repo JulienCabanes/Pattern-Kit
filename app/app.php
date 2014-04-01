@@ -10,6 +10,7 @@ $app['themes_dir'] = $app['root_dir'].'/themes';
 $app['assets_dir'] = isset($_GET['assets_dir']) ? $_GET['assets_dir'] : '../assets';
 $app['env'] = isset($_GET['env']) ? $_GET['env'] : 'dev';
 $app['debug'] = $app['env'] === 'dev';
+$app['twig.globals'] = array();
 
 // Twig registration
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -29,6 +30,13 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addFunction(new Twig_SimpleFunction('link', function($path) use ($app) {
         return '../../'.$app['theme']->getName().'/'.$path.'.html';
     }));
+
+    if(isset($app['twig.globals']) && !empty($app['twig.globals'])) {
+        foreach ($app['twig.globals'] as $key => $value) {
+            $twig->addGlobal($key, $value);
+        }
+    }
+
     return $twig;
 }));
 
