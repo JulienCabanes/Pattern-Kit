@@ -1,6 +1,8 @@
 <?php
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 // Conf
 $app['root_dir'] = dirname(__DIR__);
@@ -59,7 +61,7 @@ $app->match('/', function(Application $app) {
  * Assets proxy
  * @todo Find a better way for doing this...
  */
-$app->match('/{theme_name}/{asset_folder}/{asset_uri}', function($theme_name, $asset_folder, $asset_uri, Application $app) {
+$app->match('/{theme_name}/{asset_folder}/{asset_uri}', function($theme_name, $asset_folder, $asset_uri, Application $app, Request $request) {
     $basepath = realpath($app['themes_dir'].'/'.$theme_name.'/'.$asset_folder.'/');
     $asset_path = realpath($basepath.'/'.$asset_uri);
 
@@ -96,7 +98,20 @@ $app->match('/{theme_name}/{asset_folder}/{asset_uri}', function($theme_name, $a
         ));
     }
 
-    return new Response('Assert 404', 404);
+    // Fallback !
+    $app['theme'] = new Pattern\Theme($app['themes_dir'].'/'.$theme_name);
+    $theme_config = $app['theme']->getConfig();
+    $base_themes = $theme_config['base_theme'];
+    if(count($base_themes) > 1) {
+        $fallback_theme = $base_themes[1];
+        $fallback_uri = '/'.$fallback_theme.'/'.$asset_folder.'/'.$asset_uri;
+
+        // Sub-Request
+        $subRequest = Request::create($fallback_uri, $request->getMethod(), $_REQUEST, array(), array(), $request->server->all());
+        return $app->handle($subRequest);
+    }
+
+    return new Response('Asset 404', 404);
 })
 ->assert('asset_folder', 'assets|data')
 ->assert('asset_uri', '.*');
