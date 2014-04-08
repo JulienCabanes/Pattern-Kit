@@ -24,6 +24,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 // Twig extension
 // TODO : better link function
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+    $twig->addGlobal('app', $app);
     $twig->addGlobal('assets_dir', $app['assets_dir']);
     $twig->addGlobal('img_dir', $app['assets_dir'].'/img');
     $twig->addExtension(new Pattern\Twig_Extension_Helper());
@@ -121,6 +122,7 @@ $app->match('/{theme_name}/{pattern_type}/{pattern_name}.html', function($theme_
     $app['twig.loader']->addLoader(new Pattern\Twig_Loader($app['theme']->getPaths()));
 
     // Globalize datas
+    $app['twig']->addGlobal('theme', $app['theme']);
     foreach($app['theme']->getData() as $name => $value) {
         $app['twig']->addGlobal($name, $value);
     }
