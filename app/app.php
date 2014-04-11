@@ -48,6 +48,18 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
  * Routing start
  * @todo http://silex.sensiolabs.org/doc/organizing_controllers.html
  */
+if($dir = opendir($app['themes_dir'])) {
+    while(false !== ($child = readdir($dir))) {
+        if(substr($child, 0, 1) !== '.') {
+            $themeDir = realpath($app['themes_dir'].'/'.$child);
+            $themeRoutes = $themeDir.'/routing.php';
+            if(is_readable($themeRoutes)) {
+                require_once($themeRoutes);
+            }
+        }
+    }
+}
+
 
 /**
  * Index
