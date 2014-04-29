@@ -25,7 +25,7 @@ class Twig_Loader extends Twig_Loader_Filesystem implements Twig_LoaderInterface
         $template_content = file_get_contents($template_path);
         $template_dir = dirname($template_path);
         $template_filename = basename($template_path);
-        $template_name = str_replace('.twig', '', $template_filename); 
+        $template_name = str_replace('.twig', '', $template_filename);
 
         // Data Pattern Specific
         // http://pattern-lab.info/docs/data-pattern-specific.html
@@ -45,9 +45,11 @@ class Twig_Loader extends Twig_Loader_Filesystem implements Twig_LoaderInterface
         $data_content = '';
         if(file_exists($data_path)) {
             $data = json_decode(file_get_contents(realpath($data_path)), true);
+
             if(is_array($data)) {
                 foreach($data as $name => $value) {
-                    $encoded_value = json_encode($value);
+                    $encoded_value = self::unicodeDecode(json_encode($value));
+
                     if($default) {
                         $encoded_value = $name.'|default('.$encoded_value.')';
                     } elseif(!is_string($value) && substr($encoded_value, 0, 1) !== '[') {
@@ -57,7 +59,14 @@ class Twig_Loader extends Twig_Loader_Filesystem implements Twig_LoaderInterface
                 }
             }
         }
+
         return $data_content;
+    }
+
+    static protected function unicodeDecode($str) {
+        return preg_replace_callback('/\\\\u([0-9a-f]{4})/i', function($match) {
+            return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
+        }, $str);
     }
 
     protected function findTemplate($name)
@@ -88,7 +97,7 @@ class Twig_Loader extends Twig_Loader_Filesystem implements Twig_LoaderInterface
             throw new Twig_Error_Loader(sprintf('There are no registered paths for namespace "%s".', $namespace));
         }
 
-        
+
         // Split pattern path : pattern_type/{4 subdirs max}/patter_name.twig
         $name_fragments = explode('/', $name);
         $pattern_type = array_shift($name_fragments);
@@ -103,7 +112,7 @@ class Twig_Loader extends Twig_Loader_Filesystem implements Twig_LoaderInterface
         $matching_files = array();
         $matching_pattern = false;
 
-        
+
         foreach ($this->paths[$namespace] as $path) {
             for($i = 0; $i < 4; $i++) {
                 $pattern_pattern = $path.'/*'.$pattern_type.'/'.str_repeat('*/', $i).$pattern_path;
