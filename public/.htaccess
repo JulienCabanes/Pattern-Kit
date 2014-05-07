@@ -1,5 +1,12 @@
-<IfModule mod_rewrite.c>
+<IfModule mod_setenvif.c>
+    <IfModule mod_headers.c>
+        SetEnvIf Content-Type ^(multipart/form-data)(.*) NEW_CONTENT_TYPE=multipart/form-data-alternate$2 OLD_CONTENT_TYPE=$1$2
+        RequestHeader unset Content-Type env=NEW_CONTENT_TYPE
+        RequestHeader add Content-Type %{NEW_CONTENT_TYPE}e env=NEW_CONTENT_TYPE
+    </IfModule>
+</IfModule>
 
+<IfModule mod_rewrite.c>
     RewriteEngine On
     #RewriteBase /path/to/app
     RewriteCond %{REQUEST_FILENAME} !-f
